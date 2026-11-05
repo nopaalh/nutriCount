@@ -75,3 +75,20 @@
 .nutrition-sheet .editable-cell .weight input{width:100%;height:100%;text-align:right;color:#263c31;font:inherit}
 .nutrition-sheet .editable-cell select:focus,.nutrition-sheet .editable-cell input:focus{outline:0}
 .nutrition-sheet tbody td:not(.editable-cell){background:#f8faf8;color:#526a58}
+
+/* Give the worksheet more room on wider screens. */
+@media (min-width: 1051px) {
+  .content { max-width: none; }
+  .dashboard-grid { grid-template-columns: minmax(0, 1fr) 300px; }
+}
+
+/* Desktop layout: 264px sidebar, 28px margins, 12 columns, 20px gutters. */
+@media (min-width: 1051px) {
+  .sidebar { width: 264px; }
+  .content { padding-left: 28px; padding-right: 28px; }
+  .topbar { padding-left: 28px; padding-right: 28px; }
+  .stat-grid, .dashboard-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 20px; }
+  .stat-grid > * { grid-column: span 3; }
+  .dashboard-grid > .left-column { grid-column: span 9; }
+  .dashboard-grid > .right-column { grid-column: span 3; }
+}
