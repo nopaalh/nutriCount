@@ -1447,3 +1447,96 @@ footer svg {
 .macro-list {
   padding-bottom: 16px;
 }
+
+/* Neutral sage surfaces with deep green and fresh green accents. */
+.app-shell {
+  background: #fff;
+}
+
+.sidebar {
+  background: rgba(241, 244, 241, 0.9);
+  border-right-color: #d9e2db;
+}
+
+.topbar {
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom-color: #e0e6e1;
+}
+
+.stat-card,
+.panel {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(205, 218, 208, 0.9);
+  box-shadow:
+    0 8px 24px rgba(26, 69, 51, 0.06),
+    inset 0 1px 0 #fff;
+}
+
+.brand-icon {
+  background: #174c3a;
+}
+
+.brand-icon svg {
+  color: #fff;
+}
+
+.nav-item.active {
+  background: #dcebe0;
+}
+
+.nav-item.active svg,
+.add-another svg {
+  color: #174c3a;
+}
+
+.energy-summary {
+  background: rgba(230, 243, 230, 0.8);
+  border-color: #d2e6d5;
+}
+
+.nutrition-sheet thead th,
+.nutrition-sheet tfoot th,
+.nutrition-sheet tfoot td,
+.nutrition-sheet tfoot th:first-child {
+  background: #e5eee6;
+}
+
+.analysis-icon-button:hover,
+.result:hover {
+  background: #e0f5df;
+}
+
+.count {
+  background: #c9f3c7;
+}
+
+/* Place overview icons beside their labels and values. */
+.stat-card {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.stat-top {
+  display: contents;
+}
+
+.stat-top > span:first-child {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.stat-icon {
+  grid-column: 1;
+  grid-row: 1;
+  width: 24px;
+  height: 24px;
+}
+
+.stat-number {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 3px 0 0;
+}

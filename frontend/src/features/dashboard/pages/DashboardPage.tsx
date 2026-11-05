@@ -5,7 +5,7 @@ import {
   Leaf,
   PanelRightClose,
   Plus,
-  Sigma,
+  ChartColumn,
   Wheat,
 } from "lucide-react";
 import { AppLayout } from "../../../app/layouts/AppLayout";
@@ -116,7 +116,7 @@ export default function DashboardPage() {
                     title="Show total analysis"
                     onClick={() => setShowAnalysis(true)}
                   >
-                    <Sigma size={18} />
+                    <ChartColumn size={18} />
                   </button>
                 )}
                 <button
