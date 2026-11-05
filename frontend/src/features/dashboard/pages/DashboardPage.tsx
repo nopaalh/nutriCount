@@ -20,7 +20,10 @@ export default function DashboardPage() {
  const macros = [{ label: 'Carbs', value: totals.carbs, color: '#91b989' }, { label: 'Protein', value: totals.protein, color: '#3e8065' }, { label: 'Fat', value: totals.fat, color: '#d5bd7d' }];
  const macroSum = macros.reduce((sum, item) => sum + item.value, 0);
  return <AppLayout>
-        <div className="heading-row"><div><h1>Nutrition dashboard <span>✳</span></h1></div><a className="primary-button" href="#ingredients"><Plus size={17}/> Add ingredient</a></div>
+   <div className="heading-row">
+     <div><h1>Nutrition dashboard</h1></div>
+     {/*<a className="primary-button" href="#ingredients"><Plus size={17} /> Add ingredient</a>*/}
+   </div>
         <div className="overview-line"><div><h2>Nutrition overview</h2></div></div>
         <section className="stat-grid" aria-label="Nutrition totals">{nutrients.map(({ key, label, unit, icon: Icon, color }) => <article className="stat-card" key={key}><div className="stat-top"><span>{label}</span><span className={`stat-icon ${color}`}><Icon size={17}/></span></div><div className="stat-number">{format(totals[key])} <small>{unit}</small></div></article>)}</section>
         <div className="dashboard-grid"><div className="left-column">
