@@ -2,7 +2,7 @@
 
 NutriCount adalah aplikasi analisis gizi akademis yang dikembangkan dengan inspirasi dari NutriSurvey. Phase 1 menyiapkan Food Composition Database menggunakan PostgreSQL 17 dan Docker Compose, dengan TKPI sebagai sumber utama dan USDA FoodData Central sebagai sumber alternatif.
 
-Saat ini implementasi mencakup infrastruktur database, schema, reference seeds, dan constraint tests. Backend, frontend, food matching engine, nutrition calculation engine, dan importer TKPI belum diimplementasikan.
+Saat ini implementasi mencakup dashboard frontend, infrastruktur database, schema, reference seeds, dan constraint tests. Dashboard menggunakan data contoh dan belum terhubung ke backend. Backend, food matching engine, dan importer TKPI belum diimplementasikan.
 
 ## Prasyarat
 
@@ -17,7 +17,7 @@ Tidak perlu menginstal PostgreSQL atau `psql` di host. Commands di bawah menggun
 
 ```text
 nutriCount/
-├── frontend/                        # Disiapkan untuk aplikasi frontend
+├── frontend/                        # Dashboard React + Vite
 ├── backend/
 │   └── database/
 │       ├── migrations/
@@ -34,6 +34,18 @@ nutriCount/
 ├── .gitignore
 └── README.md
 ```
+
+## Menjalankan frontend
+
+Pastikan Node.js dan npm terinstal, lalu jalankan:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Buka alamat lokal yang ditampilkan Vite. Dashboard menggunakan data contoh yang belum diverifikasi dan belum terhubung ke database; nilai nutrisi diskalakan sesuai berat yang dimasukkan.
 
 ## 1. Konfigurasi environment
 
