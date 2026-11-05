@@ -59,6 +59,7 @@ export function FoodTable({ selected }: { selected: SelectedFood[] }) {
                         aria-label={`Weight of ${food.name} in grams`}
                         type="text"
                         inputMode="numeric"
+                        size={5}
                         pattern="[0-9]*"
                         value={food.weight}
                         onChange={(event) => {
