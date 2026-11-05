@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Activity, Flame, Leaf, Plus, Wheat } from "lucide-react";
+import {
+  Activity,
+  Flame,
+  Leaf,
+  PanelRightClose,
+  Plus,
+  Sigma,
+  Wheat,
+} from "lucide-react";
 import { AppLayout } from "../../../app/layouts/AppLayout";
 import { foods } from "../../foods/data/foods";
 import { FoodSearch } from "../../foods/components/FoodSearch";
@@ -61,15 +69,6 @@ export default function DashboardPage() {
         <div>
           <h1>Nutrition dashboard</h1>
         </div>
-        <button
-          type="button"
-          className="analysis-toggle"
-          aria-expanded={showAnalysis}
-          aria-controls="breakdown"
-          onClick={() => setShowAnalysis((visible) => !visible)}
-        >
-          {showAnalysis ? "Hide total analysis" : "Show total analysis"}
-        </button>
       </div>
 
       <div className="overview-line">
@@ -106,13 +105,28 @@ export default function DashboardPage() {
                   <span className="count">{selected.length}</span>
                 </h2>
               </div>
-              <button
-                className="text-button"
-                onClick={clear}
-                disabled={!entries.length}
-              >
-                Clear all
-              </button>
+              <div className="ingredient-actions">
+                {!showAnalysis && (
+                  <button
+                    type="button"
+                    className="analysis-icon-button"
+                    aria-label="Show total analysis"
+                    aria-expanded={false}
+                    aria-controls="breakdown"
+                    title="Show total analysis"
+                    onClick={() => setShowAnalysis(true)}
+                  >
+                    <Sigma size={18} />
+                  </button>
+                )}
+                <button
+                  className="text-button"
+                  onClick={clear}
+                  disabled={!entries.length}
+                >
+                  Clear all
+                </button>
+              </div>
             </div>
 
             <FoodSearch />
@@ -137,9 +151,17 @@ export default function DashboardPage() {
               <div>
                 <h2>Total analysis</h2>
               </div>
-              <span className="small-icon">
-                <Activity size={16} />
-              </span>
+              <button
+                type="button"
+                className="analysis-icon-button"
+                aria-label="Hide total analysis"
+                aria-expanded={true}
+                aria-controls="breakdown"
+                title="Hide total analysis"
+                onClick={() => setShowAnalysis(false)}
+              >
+                <PanelRightClose size={18} />
+              </button>
             </div>
 
             <div className="energy-summary">
@@ -178,7 +200,7 @@ export default function DashboardPage() {
                 </div>
               ))}
 
-              <div className="macro-row fiber">
+              <div className="macro-row">
                 <span>
                   <i />
                   Fiber
@@ -188,10 +210,6 @@ export default function DashboardPage() {
                 </strong>
               </div>
             </div>
-
-            <p className="breakdown-foot">
-              Nutrient amounts reflect the weights you enter.
-            </p>
           </section>
         </div>
       </div>
