@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { create } from 'zustand';
-import { Activity, Apple, ArrowDown, ArrowUpRight, BookOpen, Check, ChevronDown, CircleHelp, Flame, Leaf, Plus, Search, Sprout, Trash2, Wheat, X } from 'lucide-react';
+import { Activity, Apple, ArrowDown, ArrowUpRight, BookOpen, ChevronDown, Flame, Leaf, Plus, Search, Sprout, Trash2, Wheat, X } from 'lucide-react';
 import './style.css';
 
 // Illustrative values per 100 g. Replace with verified food composition data from the API.
@@ -69,10 +69,9 @@ function App() {
             {selected.length ? <div className="sheet-scroll"><table className="nutrition-sheet"><thead><tr><th scope="col">Food</th><th scope="col">Amount <small>g</small></th>{nutrientRows.map(([key, label, unit]) => <th scope="col" key={key}>{label} <small>{unit}</small></th>)}<th scope="col"><span className="sr-only">Remove</span></th></tr></thead><tbody>{selected.map((food) => <tr key={food.id}><th scope="row"><div className="sheet-food"><span className="food-icon">{food.emoji}</span><span>{food.name}</span></div></th><td><label className="weight"><input aria-label={`Weight of ${food.name} in grams`} type="number" min="0" step="1" value={food.weight} onChange={(e) => update(food.id, e.target.value === '' ? '' : Math.max(0, Number(e.target.value)))}/><span>g</span></label></td>{nutrientRows.map(([key]) => <td key={key}>{food[key] == null ? '—' : format(food[key] * (Number(food.weight) || 0) / 100)}</td>)}<td><button className="delete" aria-label={`Remove ${food.name}`} onClick={() => remove(food.id)}><Trash2 size={16}/></button></td></tr>)}</tbody><tfoot><tr><th scope="row">Total</th><td>{format(selected.reduce((sum, food) => sum + (Number(food.weight) || 0), 0))}</td>{nutrientRows.map(([key]) => { const complete = selected.every((food) => food[key] != null); return <td key={key}>{complete ? format(selected.reduce((sum, food) => sum + food[key] * (Number(food.weight) || 0) / 100, 0)) : '—'}</td>; })}<td/></tr></tfoot></table></div> : <div className="empty"><Apple size={24}/><strong>Your list is empty</strong><span>Search above to add an ingredient.</span></div>}
             <button className="add-another" onClick={() => { setOpen(true); document.querySelector('.search-wrap input')?.focus(); }}><Plus size={16}/> Add another ingredient</button>
           </section>
-          <div className="note"><span className="note-icon"><CircleHelp size={18}/></span><div><strong>A little note about the numbers</strong><p>Values shown are sample data per 100 g and are scaled to your entered weight. Actual nutrition can vary by source and preparation.</p></div></div>
+
         </div><div className="right-column"><section className="panel breakdown" id="breakdown"><div className="panel-heading"><div><h2>Total analysis</h2></div><span className="small-icon"><Activity size={16}/></span></div><div className="energy-summary"><span>Total energy</span><strong>{format(totals.energy)} <small>kcal</small></strong><span>for {selected.length} selected {selected.length === 1 ? 'ingredient' : 'ingredients'}</span></div><div className="macro-bar">{macros.map((item) => <div key={item.label} style={{width: `${macroSum ? item.value / macroSum * 100 : 0}%`, background: item.color}}/>)}</div><div className="macro-list">{macros.map((item) => <div className="macro-row" key={item.label}><span><i style={{background:item.color}}/>{item.label}</span><strong>{format(item.value)} <small>g</small></strong></div>)}<div className="macro-row fiber"><span><i/>Fiber</span><strong>{format(totals.fiber)} <small>g</small></strong></div></div><p className="breakdown-foot">Nutrient amounts reflect the weights you enter.</p></section>
-          <section className="panel how"><div className="how-heading"><span><Sprout size={19}/></span><h2>Simple as that</h2></div><div><span>1</span> Find an ingredient</div><div><span>2</span> Enter its weight in grams</div><div><span>3</span> Explore the nutrition breakdown</div></section>
-          <div className="source-note"><Check size={15}/><span>Made for more informed food choices</span></div>
+
         </div></div>
         <footer><span>© NutriCount</span><span>Small choices, better understanding. <Leaf size={13}/></span></footer>
       </div>
