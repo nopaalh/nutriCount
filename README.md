@@ -17,14 +17,16 @@ Tidak perlu menginstal PostgreSQL atau `psql` di host. Commands di bawah menggun
 
 ```text
 nutriCount/
-├── database/
-│   ├── migrations/
-│   │   └── 001_phase1_food_composition.sql
-│   ├── seeds/
-│   │   ├── 001_data_sources.sql
-│   │   └── 002_nutrient_definitions.sql
-│   └── tests/
-│       └── 001_constraints.sql
+├── frontend/                        # Disiapkan untuk aplikasi frontend
+├── backend/
+│   └── database/
+│       ├── migrations/
+│       │   └── 001_phase1_food_composition.sql
+│       ├── seeds/
+│       │   ├── 001_data_sources.sql
+│       │   └── 002_nutrient_definitions.sql
+│       └── tests/
+│           └── 001_constraints.sql
 ├── backups/                         # Lokal; tidak di-commit
 ├── compose.yaml
 ├── .env                             # Lokal; tidak di-commit
@@ -100,7 +102,7 @@ Tag `postgres:17` mengikuti patch releases PostgreSQL 17; nomor patch dapat beru
 ```bash
 docker compose exec -T postgres sh -c \
   'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 --single-transaction -f -' \
-  < database/migrations/001_phase1_food_composition.sql
+  < backend/database/migrations/001_phase1_food_composition.sql
 ```
 
 `--single-transaction` menjalankan seluruh migration sebagai satu paket. `ON_ERROR_STOP=1` menghentikan eksekusi saat error sehingga perubahan transaction dibatalkan. Redirection `<` membaca file dari host; file tidak perlu disalin ke container.
@@ -114,11 +116,11 @@ Workflow saat ini belum memiliki migration ledger atau checksum tracking otomati
 ```bash
 docker compose exec -T postgres sh -c \
   'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 --single-transaction -f -' \
-  < database/seeds/001_data_sources.sql
+  < backend/database/seeds/001_data_sources.sql
 
 docker compose exec -T postgres sh -c \
   'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 --single-transaction -f -' \
-  < database/seeds/002_nutrient_definitions.sql
+  < backend/database/seeds/002_nutrient_definitions.sql
 ```
 
 Seeds mengisi TKPI dengan priority `1`, USDA dengan priority `2`, dan 21 nutrient definitions. Keduanya memakai `ON CONFLICT (code) DO NOTHING`, sehingga eksekusi ulang melewati kode existing tanpa memperbarui isinya.
@@ -193,7 +195,7 @@ psql -h localhost -p 5432 -U nutricount -d nutricount -W
 ```bash
 docker compose exec -T postgres sh -c \
   'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -f -' \
-  < database/tests/001_constraints.sql
+  < backend/database/tests/001_constraints.sql
 ```
 
 Expected output memuat:
