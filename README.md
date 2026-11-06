@@ -21,12 +21,14 @@ nutriCount/
 ├── backend/
 │   └── database/
 │       ├── migrations/
-│       │   └── 001_phase1_food_composition.sql
+│       │   ├── 001_phase1_food_composition.sql
+│       │   └── 002_user_accounts.sql
 │       ├── seeds/
 │       │   ├── 001_data_sources.sql
 │       │   └── 002_nutrient_definitions.sql
 │       └── tests/
-│           └── 001_constraints.sql
+│           ├── 001_constraints.sql
+│           └── 002_user_accounts.sql
 ├── backups/                         # Lokal; tidak di-commit
 ├── compose.yaml
 ├── .env                             # Lokal; tidak di-commit
@@ -123,6 +125,30 @@ Migration dijalankan secara eksplisit melalui `psql`; tidak ada mekanisme init-d
 
 Workflow saat ini belum memiliki migration ledger atau checksum tracking otomatis. Migration 001 menggunakan `CREATE TABLE` dan tidak boleh dijalankan ulang setelah berhasil. Jangan mengedit migration yang sudah diterapkan untuk mengubah database existing. Buat migration berikutnya, misalnya `002_...sql`, dan catat penerapannya. Jangan drop database/volume untuk sekadar mengulang migration.
 
+### Migration akun pengguna (002)
+
+Jalankan satu kali setelah migration 001. Lewati jika migration 002 sudah diterapkan pada database tersebut:
+
+```bash
+docker compose exec -T postgres sh -c \
+  'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 --single-transaction -f -' \
+  < backend/database/migrations/002_user_accounts.sql
+```
+
+Migration ini membuat `app_user` dan `email_verification_code`. Username (3–30 karakter ASCII huruf, angka, atau underscore) serta email unik tanpa membedakan huruf besar/kecil. Password dan kode asli tidak boleh disimpan: backend Go nantinya harus melakukan password hashing dan menyimpan kode sebagai HMAC-SHA-256 menggunakan kunci rahasia server yang terpisah dari database. Kolom `code_hash` menyimpan 32 byte hasil HMAC; database tidak bisa membuktikan bahwa nilai yang dimasukkan benar-benar aman.
+
+Kode berlaku lima menit dan hanya satu kode terbuka per akun. Backend harus membatalkan kode lama sebelum membuat kode baru, termasuk setelah kode kedaluwarsa atau lima percobaan gagal. Backend juga harus menangani verifikasi dan konsumsi kode secara atomik, batas lima percobaan, jeda kirim ulang 60 detik, validasi email, penolakan login sebelum verifikasi, serta penghapusan akun belum diverifikasi setelah 24 jam. Aturan proses tersebut **belum diimplementasikan** oleh migration ini. Pengiriman email menggunakan Resend akan dibuat pada fase backend; jangan masukkan API key ke repository.
+
+Uji constraint akun tanpa menyimpan data tes:
+
+```bash
+docker compose exec -T postgres sh -c \
+  'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -f -' \
+  < backend/database/tests/002_user_accounts.sql
+```
+
+Expected: `NOTICE: PASS: all checks in 002_user_accounts.sql` dan `ROLLBACK`. Jangan jalankan ulang migration 002; belum ada migration ledger otomatis.
+
 ## 4. Isi reference data
 
 ```bash
@@ -160,7 +186,7 @@ SELECT count(*) AS nutrient_count FROM nutrient_definition;
 \q
 ```
 
-`\dt` menampilkan enam tabel. Expected nutrient count setelah seed adalah `21`.
+`\dt` menampilkan enam tabel setelah migration 001, atau delapan setelah migration 002. Expected nutrient count setelah seed adalah `21`.
 
 ### Koneksi backend atau database client
 
