@@ -1,21 +1,12 @@
 import type { ReactNode } from "react";
-import {
-  Activity,
-  Apple,
-  BookOpen,
-  ChevronDown,
-  Leaf,
-  Sprout,
-} from "lucide-react";
+import { Activity, Apple, BookOpen, ChevronDown, Leaf } from "lucide-react";
 
 export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <a className="brand" href="#dashboard">
-          <span className="brand-icon">
-            <Sprout size={20} />
-          </span>
+          <img className="brand-logo" src="/nutricount-icon.png" alt="" />
           <span>
             nutri<span>count</span>
             <small>FOOD & NUTRITION</small>

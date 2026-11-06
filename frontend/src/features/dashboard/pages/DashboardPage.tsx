@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Activity,
-  Flame,
-  Leaf,
-  PanelRightClose,
-  Plus,
-  ChartColumn,
-  Wheat,
-} from "lucide-react";
+import { ChartColumn, PanelRightClose, Plus } from "lucide-react";
 import { AppLayout } from "../../../app/layouts/AppLayout";
 import { foods } from "../../foods/data/foods";
 import { FoodSearch } from "../../foods/components/FoodSearch";
@@ -16,28 +8,10 @@ import { useNutrition } from "../store/useNutritionStore";
 import { format } from "../../../shared/lib/formatters";
 
 const nutrients = [
-  {
-    key: "energy",
-    label: "Energy",
-    unit: "kcal",
-    icon: Flame,
-    color: "orange",
-  },
-  {
-    key: "protein",
-    label: "Protein",
-    unit: "g",
-    icon: Activity,
-    color: "green",
-  },
-  {
-    key: "carbs",
-    label: "Carbohydrates",
-    unit: "g",
-    icon: Wheat,
-    color: "yellow",
-  },
-  { key: "fat", label: "Total fat", unit: "g", icon: Leaf, color: "mint" },
+  { key: "energy", label: "Energy", unit: "kcal" },
+  { key: "protein", label: "Protein", unit: "g" },
+  { key: "carbs", label: "Carbohydrates", unit: "g" },
+  { key: "fat", label: "Total fat", unit: "g" },
 ] as const;
 
 export default function DashboardPage() {
@@ -78,13 +52,10 @@ export default function DashboardPage() {
       </div>
 
       <section className="stat-grid" aria-label="Nutrition totals">
-        {nutrients.map(({ key, label, unit, icon: Icon, color }) => (
+        {nutrients.map(({ key, label, unit }) => (
           <article className="stat-card" key={key}>
             <div className="stat-top">
               <span>{label}</span>
-              <span className={`stat-icon ${color}`}>
-                <Icon size={17} />
-              </span>
             </div>
             <div className="stat-number">
               {format(totals[key])} <small>{unit}</small>
@@ -100,10 +71,7 @@ export default function DashboardPage() {
           <section className="panel ingredients" id="ingredients">
             <div className="panel-heading">
               <div>
-                <h2>
-                  Your ingredients{" "}
-                  <span className="count">{selected.length}</span>
-                </h2>
+                <h2>Your ingredients</h2>
               </div>
               <div className="ingredient-actions">
                 {!showAnalysis && (

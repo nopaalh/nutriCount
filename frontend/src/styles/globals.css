@@ -1512,33 +1512,22 @@ footer svg {
   background: #c9f3c7;
 }
 
-/* Place overview icons beside their labels and values. */
-.stat-card {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-items: center;
-  column-gap: 8px;
+/* Keep table cells and the energy summary white. */
+.nutrition-sheet th,
+.nutrition-sheet td,
+.nutrition-sheet thead th,
+.nutrition-sheet tbody th,
+.nutrition-sheet tbody td:not(.editable-cell),
+.nutrition-sheet tfoot th,
+.nutrition-sheet tfoot td,
+.nutrition-sheet tfoot th:first-child,
+.energy-summary {
+  background: #fff;
 }
 
-.stat-top {
-  display: contents;
-}
-
-.stat-top > span:first-child {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.stat-icon {
-  grid-column: 1;
-  grid-row: 1;
-  width: 24px;
-  height: 24px;
-}
-
-.stat-number {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  margin: 3px 0 0;
+.brand-logo {
+  width: 37px;
+  height: 37px;
+  flex: none;
+  object-fit: contain;
 }
