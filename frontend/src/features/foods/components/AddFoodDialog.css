@@ -1,12 +1,9 @@
 .add-food-dialog {
-  --add-food-top: clamp(16px, 12vh, 80px);
   position: fixed;
-  inset-inline: 0;
-  top: var(--add-food-top);
-  bottom: auto;
+  inset: 0;
   width: min(600px, calc(100vw - 32px));
-  max-height: calc(100dvh - var(--add-food-top) - 16px);
-  margin: 0 auto;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
   padding: 0;
   overflow: hidden;
   border: 1px solid #e5e5ea;
@@ -23,7 +20,7 @@
 .add-food-dialog form {
   display: flex;
   flex-direction: column;
-  max-height: calc(100dvh - var(--add-food-top) - 18px);
+  max-height: calc(100dvh - 34px);
 }
 
 .add-food-dialog .add-food-search-header {
@@ -243,10 +240,4 @@
 
 .add-food-dialog button.add-food-dismiss:hover {
   color: #181818;
-}
-
-@media (max-width: 760px) {
-  .add-food-dialog {
-    --add-food-top: 16px;
-  }
 }

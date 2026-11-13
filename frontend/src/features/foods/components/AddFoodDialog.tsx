@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { FormEvent, KeyboardEvent } from "react";
+import type { FormEvent, KeyboardEvent, MouseEvent, PointerEvent } from "react";
 import { Plus, Search } from "lucide-react";
 import type { Food } from "../types/food.types";
 import { FoodEntryRow } from "./FoodEntryRow";
@@ -22,6 +22,7 @@ export const AddFoodDialog = forwardRef<HTMLDialogElement, AddFoodDialogProps>(
   function AddFoodDialog({ foods, onAddFood, onClose }, forwardedRef) {
     const dialogRef = useRef<HTMLDialogElement>(null);
     const listRef = useRef<HTMLUListElement>(null);
+    const pointerStartedOutside = useRef(false);
     const inputId = useId();
     const listId = `${inputId}-foods`;
     const helpId = `${inputId}-help`;
@@ -97,7 +98,37 @@ export const AddFoodDialog = forwardRef<HTMLDialogElement, AddFoodDialogProps>(
       dialogRef.current?.close();
     }
 
+    function isOutsideDialog(clientX: number, clientY: number) {
+      const bounds = dialogRef.current?.getBoundingClientRect();
+      return Boolean(
+        bounds &&
+        (clientX < bounds.left ||
+          clientX > bounds.right ||
+          clientY < bounds.top ||
+          clientY > bounds.bottom),
+      );
+    }
+
+    function handlePointerDown(event: PointerEvent<HTMLDialogElement>) {
+      pointerStartedOutside.current =
+        event.button === 0 &&
+        event.target === event.currentTarget &&
+        isOutsideDialog(event.clientX, event.clientY);
+    }
+
+    function handleBackdropClick(event: MouseEvent<HTMLDialogElement>) {
+      const shouldClose =
+        pointerStartedOutside.current &&
+        event.target === event.currentTarget &&
+        isOutsideDialog(event.clientX, event.clientY);
+      pointerStartedOutside.current = false;
+      if (shouldClose) {
+        event.currentTarget.close();
+      }
+    }
+
     function handleClose() {
+      pointerStartedOutside.current = false;
       setQuery("");
       setWeight(100);
       setFoodId((current) =>
@@ -114,6 +145,11 @@ export const AddFoodDialog = forwardRef<HTMLDialogElement, AddFoodDialogProps>(
         ref={dialogRef}
         aria-labelledby={`${inputId}-title`}
         onClose={handleClose}
+        onPointerDown={handlePointerDown}
+        onClick={handleBackdropClick}
+        onPointerCancel={() => {
+          pointerStartedOutside.current = false;
+        }}
       >
         <form onSubmit={handleSubmit}>
           <h2 className="sr-only" id={`${inputId}-title`}>
