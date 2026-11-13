@@ -4,9 +4,14 @@ import type { ChangeEvent } from "react";
 type WeightInputProps = {
   value: number | "";
   onChange: (value: number | "") => void;
+  required?: boolean;
 };
 
-export function WeightInput({ value, onChange }: WeightInputProps) {
+export function WeightInput({
+  value,
+  onChange,
+  required = false,
+}: WeightInputProps) {
   const [draft, setDraft] = useState(String(value));
 
   useEffect(() => {
@@ -41,6 +46,7 @@ export function WeightInput({ value, onChange }: WeightInputProps) {
       type="text"
       inputMode="decimal"
       autoComplete="off"
+      required={required}
       value={draft}
       onChange={handleChange}
       onBlur={() => setDraft(String(value))}
