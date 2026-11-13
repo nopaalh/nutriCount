@@ -1,0 +1,193 @@
+.food-entry-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 78px;
+  padding: 16px;
+  background: var(--diary-surface, #f5f5f7);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.food-entry-row:first-child {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.food-entry-row:last-child {
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.food-entry-row:hover,
+.food-entry-row:focus-within {
+  background: #ebebef;
+}
+
+.food-entry-row + .food-entry-row {
+  border-top: 1px solid var(--diary-border, #e5e5ea);
+}
+
+.food-entry-row .food-entry-check {
+  width: 16px;
+  height: 16px;
+  accent-color: #181818;
+}
+
+.food-entry-row .food-entry-emoji {
+  display: grid;
+  flex: 0 0 42px;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #e4ece9;
+  font-size: 23px;
+}
+
+.food-entry-row:nth-child(3n + 2) .food-entry-emoji {
+  background: #ebe5f7;
+}
+
+.food-entry-row:nth-child(3n) .food-entry-emoji {
+  background: #e2eef7;
+}
+
+.food-entry-row .food-entry-name {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.food-entry-row .food-entry-name strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.food-entry-row .food-entry-name > span {
+  display: block;
+  margin-top: 3px;
+  color: var(--diary-muted, #747784);
+  font-size: 12px;
+}
+
+.food-entry-row > span.food-entry-category {
+  flex: 0 1 180px;
+  color: var(--diary-muted, #747784);
+  font-size: 13px;
+}
+
+.food-entry-row .food-entry-weight {
+  display: inline-flex;
+  flex: 0 0 94px;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid #dddde3;
+  border-radius: 10px;
+}
+
+.food-entry-row .food-entry-weight input {
+  width: 60px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+}
+
+.food-entry-row .food-entry-weight > span {
+  color: var(--diary-muted, #747784);
+  font-size: 12px;
+}
+
+.food-entry-row .food-entry-energy {
+  flex: 0 0 110px;
+  text-align: right;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.food-entry-row .food-entry-energy small {
+  color: var(--diary-muted, #747784);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.food-entry-row > button.food-entry-remove {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #e34362;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.food-entry-row:hover > .food-entry-remove,
+.food-entry-row:focus-within > .food-entry-remove {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.food-entry-row > button.food-entry-remove:hover {
+  background: #fff0f3;
+  color: #b72c48;
+}
+
+.food-entry-row :is(button, input):focus-visible {
+  outline: 2px solid #123f9b;
+  outline-offset: 3px;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .food-entry-row > button.food-entry-remove {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 1100px) {
+  .food-entry-row > span.food-entry-category {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .food-entry-row {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 60px 14px 12px;
+  }
+
+  .food-entry-row .food-entry-name {
+    flex: 1 1 calc(100% - 70px);
+  }
+
+  .food-entry-row .food-entry-emoji {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+
+  .food-entry-row .food-entry-energy {
+    flex: 1;
+    margin-left: auto;
+  }
+
+  .food-entry-row > button.food-entry-remove {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+  }
+}
