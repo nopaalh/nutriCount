@@ -91,13 +91,9 @@
 }
 
 .add-food-dialog .food-entry-row.is-picker.is-selected,
-.add-food-dialog .food-entry-row.is-picker:hover {
-  background: #f5f5f7;
-}
-
+.add-food-dialog .food-entry-row.is-picker:hover,
 .add-food-dialog .food-entry-row.is-picker:focus-within {
-  outline: 2px solid #123f9b;
-  outline-offset: -2px;
+  background: #f5f5f7;
 }
 
 .add-food-dialog .food-entry-row.is-picker .food-entry-pick-label {
