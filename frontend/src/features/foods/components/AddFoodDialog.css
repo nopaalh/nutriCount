@@ -1,0 +1,252 @@
+.add-food-dialog {
+  --add-food-top: clamp(16px, 12vh, 80px);
+  position: fixed;
+  inset-inline: 0;
+  top: var(--add-food-top);
+  bottom: auto;
+  width: min(600px, calc(100vw - 32px));
+  max-height: calc(100dvh - var(--add-food-top) - 16px);
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e5e5ea;
+  border-radius: 22px;
+  background: #fff;
+  color: #181818;
+  box-shadow: 0 24px 80px #0003;
+}
+
+.add-food-dialog::backdrop {
+  background: #0006;
+}
+
+.add-food-dialog form {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - var(--add-food-top) - 18px);
+}
+
+.add-food-dialog .add-food-search-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 18px;
+  border-bottom: 1px solid #e5e5ea;
+  color: #747784;
+}
+
+.add-food-dialog .add-food-search-header:focus-within {
+  box-shadow: inset 0 -2px #123f9b;
+}
+
+.add-food-dialog .add-food-search-header input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
+  line-height: 24px;
+  appearance: none;
+}
+
+.add-food-dialog .add-food-search-header input::placeholder {
+  color: #999ca5;
+}
+
+.add-food-dialog .add-food-search-header input:focus-visible {
+  outline: none;
+}
+
+.add-food-dialog .add-food-search-header input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.add-food-dialog .add-food-choices {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.add-food-dialog .add-food-options {
+  max-height: min(360px, calc(100dvh - 260px));
+  margin: 0;
+  padding: 8px;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.add-food-dialog .food-entry-row.is-picker {
+  position: relative;
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.add-food-dialog .food-entry-row.is-picker.is-selected,
+.add-food-dialog .food-entry-row.is-picker:hover {
+  background: #f5f5f7;
+}
+
+.add-food-dialog .food-entry-row.is-picker:focus-within {
+  outline: 2px solid #123f9b;
+  outline-offset: -2px;
+}
+
+.add-food-dialog .food-entry-row.is-picker .food-entry-pick-label {
+  gap: 12px;
+  min-height: 54px;
+  padding: 8px 10px;
+}
+
+.add-food-dialog .food-entry-row.is-picker .food-entry-radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.add-food-dialog .food-entry-row.is-picker .food-entry-emoji {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-size: 21px;
+}
+
+.add-food-dialog .food-entry-row.is-picker .food-entry-name strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.add-food-dialog .food-entry-row.is-picker .food-entry-name > span {
+  margin-top: 1px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.add-food-dialog p.add-food-no-results {
+  margin: 0;
+  padding: 24px 18px;
+  color: #747784;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.add-food-dialog .add-food-footer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px 10px;
+  border-top: 1px solid #e5e5ea;
+}
+
+.add-food-dialog .add-food-weight {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.add-food-dialog .add-food-weight input {
+  width: 110px;
+  padding: 9px 10px;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 16px;
+}
+
+.add-food-dialog button.add-food-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 17px;
+  border: 0;
+  border-radius: 999px;
+  background: #181818;
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.add-food-dialog button.add-food-submit:hover {
+  background: #333;
+}
+
+.add-food-dialog button.add-food-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.add-food-dialog :is(button, input):focus-visible {
+  outline: 2px solid #123f9b;
+  outline-offset: 2px;
+}
+
+.add-food-dialog p.add-food-note {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 18px 12px;
+  color: #747784;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.add-food-dialog .add-food-shortcuts {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  padding: 9px 18px;
+  border-top: 1px solid #e5e5ea;
+}
+
+.add-food-dialog .add-food-shortcuts span,
+.add-food-dialog button.add-food-dismiss {
+  color: #747784;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.add-food-dialog .add-food-shortcuts kbd {
+  padding: 0 2px;
+  font: inherit;
+}
+
+.add-food-dialog button.add-food-dismiss {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+}
+
+.add-food-dialog button.add-food-dismiss:hover {
+  color: #181818;
+}
+
+@media (max-width: 760px) {
+  .add-food-dialog {
+    --add-food-top: 16px;
+  }
+}
