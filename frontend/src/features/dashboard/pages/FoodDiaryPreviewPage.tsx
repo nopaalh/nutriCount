@@ -207,12 +207,8 @@ export default function FoodDiaryPreviewPage() {
             <h1>
               {isMobile && mobileView === "analysis"
                 ? "Nutrition summary"
-                : "Food diary"}
+                : "Nutrition calculator"}
             </h1>
-            <p>
-              {selected.length} {selected.length === 1 ? "food" : "foods"} ·{" "}
-              {format(totals.energy)} kcal total
-            </p>
           </div>
         </header>
 
@@ -295,11 +291,6 @@ export default function FoodDiaryPreviewPage() {
                 </label>
               </div>
             )}
-            <p className="diary-mobile-count">
-              {visibleFoods.length}{" "}
-              {visibleFoods.length === 1 ? "food" : "foods"} ·{" "}
-              {format(visibleEnergy)} kcal total
-            </p>
           </div>
 
           {selecting && (

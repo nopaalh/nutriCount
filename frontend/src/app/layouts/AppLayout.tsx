@@ -46,9 +46,9 @@ export function AppLayout({
           className={`nav-item preview-link${isPreview ? " active" : ""}`}
           href="#/preview"
           aria-current={isPreview ? "page" : undefined}
-          aria-label="Food diary"
+          aria-label="Nutrition calculator"
         >
-          <UtensilsCrossed width={18} height={20} /> Food diary
+          <UtensilsCrossed width={18} height={20} /> Nutrition calculator
         </a>
         <a
           className="nav-item"
