@@ -104,6 +104,7 @@ export function NutritionRing({
         <h2 className="nutrition-ring-heading">Nutrition summary</h2>
         <div
           className="nutrition-ring-toggle"
+          data-view={view}
           role="group"
           aria-label="Nutrient view"
         >
