@@ -241,3 +241,9 @@
 .add-food-dialog button.add-food-dismiss:hover {
   color: #181818;
 }
+
+@media (max-width: 760px) {
+  .add-food-dialog .add-food-shortcuts {
+    display: none;
+  }
+}
