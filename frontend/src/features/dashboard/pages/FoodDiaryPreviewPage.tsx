@@ -12,7 +12,7 @@ import { AppLayout } from "../../../app/layouts/AppLayout";
 import { format } from "../../../shared/lib/formatters";
 import { AddFoodDialog } from "../../foods/components/AddFoodDialog";
 import { FoodEntryRow } from "../../foods/components/FoodEntryRow";
-import { foods } from "../../foods/data/foods";
+import { foods, nutrientRows } from "../../foods/data/foods";
 import { NutritionRing } from "../components/NutritionRing";
 
 import { useNutrition } from "../store/useNutritionStore";
@@ -69,6 +69,24 @@ export default function FoodDiaryPreviewPage() {
       totals[key] += (food[key] * Number(food.weight)) / 100;
     }
   }
+
+  const nutrientAmounts = nutrientRows.map(([key, label, unit]) => {
+    const complete = selected.every(
+      (food) => typeof food[key] === "number" && Number.isFinite(food[key]),
+    );
+
+    return {
+      key,
+      label: key === "carbs" ? "Carbohydrates" : label,
+      unit,
+      value: complete
+        ? selected.reduce(
+            (sum, food) => sum + ((food[key] ?? 0) * Number(food.weight)) / 100,
+            0,
+          )
+        : null,
+    };
+  });
 
   const visibleFoods =
     isMobile && category
@@ -201,6 +219,7 @@ export default function FoodDiaryPreviewPage() {
         <div id="/preview/breakdown" className="diary-summary-anchor">
           <NutritionRing
             totals={totals}
+            nutrients={nutrientAmounts}
             compact={isMobile && mobileView === "foods"}
           />
         </div>

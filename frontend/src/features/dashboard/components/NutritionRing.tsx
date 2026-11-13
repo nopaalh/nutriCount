@@ -1,8 +1,11 @@
-import { useId } from "react";
+import { useId, useState } from "react";
+import { NutrientList } from "./NutrientList";
+import type { NutrientAmount } from "./NutrientList";
 import "./NutritionRing.css";
 
 export type NutritionRingProps = {
   compact?: boolean;
+  nutrients: NutrientAmount[];
   totals: {
     energy: number;
     protein: number;
@@ -35,8 +38,14 @@ function safeAmount(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
-export function NutritionRing({ totals, compact = false }: NutritionRingProps) {
+export function NutritionRing({
+  totals,
+  nutrients,
+  compact = false,
+}: NutritionRingProps) {
+  const [view, setView] = useState<"macros" | "all">("macros");
   const chartId = useId();
+  const panelId = `${chartId}-nutrients`;
   const titleId = `${chartId}-title`;
   const descriptionId = `${chartId}-description`;
   const energy = safeAmount(totals.energy);
@@ -91,7 +100,33 @@ export function NutritionRing({ totals, compact = false }: NutritionRingProps) {
       className={`nutrition-ring-summary${compact ? " is-compact" : ""}`}
       aria-label="Nutrition summary"
     >
-      <h2 className="nutrition-ring-heading">Nutrition summary</h2>
+      <div className="nutrition-ring-toolbar">
+        <h2 className="nutrition-ring-heading">Nutrition summary</h2>
+        <div
+          className="nutrition-ring-toggle"
+          role="group"
+          aria-label="Nutrient view"
+        >
+          <button
+            type="button"
+            className="nutrition-ring-view-button"
+            aria-pressed={view === "macros"}
+            aria-controls={panelId}
+            onClick={() => setView("macros")}
+          >
+            Macros
+          </button>
+          <button
+            type="button"
+            className="nutrition-ring-view-button"
+            aria-pressed={view === "all"}
+            aria-controls={panelId}
+            onClick={() => setView("all")}
+          >
+            All nutrients
+          </button>
+        </div>
+      </div>
 
       <div className="nutrition-ring-layout">
         <div className="nutrition-ring-chart">
@@ -161,64 +196,89 @@ export function NutritionRing({ totals, compact = false }: NutritionRingProps) {
           </svg>
         </div>
 
-        <div className="nutrition-ring-legend">
+        <div className="nutrition-ring-legend" id={panelId}>
           <h3 className="nutrition-ring-legend-heading">
-            Calories by nutrient
+            {view === "macros"
+              ? "Calories by nutrient"
+              : "All nutrient amounts"}
           </h3>
 
-          <ul className="nutrition-ring-macros">
-            {macros.map((macro) => (
-              <li className="nutrition-ring-macro" key={macro.key}>
-                <div className="nutrition-ring-macro-heading">
-                  <span
-                    className="nutrition-ring-dot"
-                    style={{ backgroundColor: macro.color }}
-                    aria-hidden="true"
-                  />
-                  <span className="nutrition-ring-label">{macro.label}</span>
-                  <span className="nutrition-ring-amount">
-                    {amountFormatter.format(macro.amount)} g
-                  </span>
-                </div>
-                <div className="nutrition-ring-share-row">
-                  <div className="nutrition-ring-track" aria-hidden="true">
-                    <div
-                      className="nutrition-ring-progress"
-                      style={{
-                        backgroundColor: macro.color,
-                        width: `${macro.share * 100}%`,
-                      }}
-                    />
-                  </div>
-                  <span className="nutrition-ring-percentage">
-                    {shareFormatter.format(macro.share)}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+          {view === "all" ? (
+            <NutrientList nutrients={nutrients} />
+          ) : (
+            <div
+              className="nutrition-ring-macro-content"
+              role="region"
+              aria-label="Calories by nutrient"
+              tabIndex={0}
+            >
+              <ul className="nutrition-ring-macros">
+                {macros.map((macro) => (
+                  <li className="nutrition-ring-macro" key={macro.key}>
+                    <div className="nutrition-ring-macro-heading">
+                      <span
+                        className="nutrition-ring-dot"
+                        style={{ backgroundColor: macro.color }}
+                        aria-hidden="true"
+                      />
+                      <span className="nutrition-ring-label">
+                        {macro.label}
+                      </span>
+                      <span className="nutrition-ring-amount">
+                        {amountFormatter.format(macro.amount)} g
+                      </span>
+                    </div>
+                    <div className="nutrition-ring-share-row">
+                      <div className="nutrition-ring-track" aria-hidden="true">
+                        <div
+                          className="nutrition-ring-progress"
+                          style={{
+                            backgroundColor: macro.color,
+                            width: `${macro.share * 100}%`,
+                          }}
+                        />
+                      </div>
+                      <span className="nutrition-ring-percentage">
+                        {shareFormatter.format(macro.share)}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
 
-          <div className="nutrition-ring-fiber">
-            <span className="nutrition-ring-fiber-line" aria-hidden="true" />
-            <span className="nutrition-ring-label">Fiber</span>
-            <span className="nutrition-ring-amount">
-              {amountFormatter.format(fiber)} g
-            </span>
-          </div>
+              <div className="nutrition-ring-fiber">
+                <span
+                  className="nutrition-ring-fiber-line"
+                  aria-hidden="true"
+                />
+                <span className="nutrition-ring-label">Fiber</span>
+                <span className="nutrition-ring-amount">
+                  {amountFormatter.format(fiber)} g
+                </span>
+              </div>
 
-          {!hasMacroEnergy && (
-            <p className="nutrition-ring-empty">
-              No estimated calories to show.
-            </p>
+              {!hasMacroEnergy && (
+                <p className="nutrition-ring-empty">
+                  No estimated calories to show.
+                </p>
+              )}
+            </div>
           )}
         </div>
       </div>
 
-      <p className="nutrition-ring-note">
-        {compact
-          ? "Estimated calorie shares. Fiber is part of carbohydrates."
-          : "Percentages estimate calories from protein, carbohydrates, and fat. Fiber is part of carbohydrates."}
-      </p>
+      <div className="nutrition-ring-notes">
+        <p className="nutrition-ring-note" aria-hidden={view !== "macros"}>
+          {compact
+            ? "Estimated calorie shares. Fiber is part of carbohydrates."
+            : "Percentages estimate calories from protein, carbohydrates, and fat. Fiber is part of carbohydrates."}
+        </p>
+        <p className="nutrition-ring-note" aria-hidden={view !== "all"}>
+          {compact
+            ? "Amounts use the unit shown. Ring colors show macros."
+            : "Totals are unavailable if any food has a missing value. Ring colors show estimated calorie shares from macros."}
+        </p>
+      </div>
     </section>
   );
 }
