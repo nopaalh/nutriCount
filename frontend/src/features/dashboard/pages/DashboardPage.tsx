@@ -8,7 +8,7 @@ import { useNutrition } from "../store/useNutritionStore";
 import { format } from "../../../shared/lib/formatters";
 
 const nutrients = [
-  { key: "energy", label: "Energy", unit: "kcal" },
+  { key: "energy", label: "Total calories", unit: "kcal" },
   { key: "protein", label: "Protein", unit: "g" },
   { key: "carbs", label: "Carbohydrates", unit: "g" },
   { key: "fat", label: "Total fat", unit: "g" },
@@ -30,21 +30,28 @@ export default function DashboardPage() {
       totals[key] += (food[key] * (Number(food.weight) || 0)) / 100;
 
   const macros = [
-    { label: "Carbs", value: totals.carbs, color: "#91b989" },
+    { label: "Carbohydrates", value: totals.carbs, color: "#91b989" },
     { label: "Protein", value: totals.protein, color: "#3e8065" },
     { label: "Fat", value: totals.fat, color: "#d5bd7d" },
   ];
 
   const macroSum = macros.reduce((sum, item) => sum + item.value, 0);
 
+  function openFoodChooser() {
+    const trigger = document.querySelector<HTMLButtonElement>(
+      ".search-wrap .food-picker-trigger",
+    );
+    trigger?.focus();
+    trigger?.click();
+  }
+
   return (
     <AppLayout>
       <header className="dashboard-header">
         <div>
-          <h1>Nutrition dashboard</h1>
+          <h1>Dashboard</h1>
           <p>
-            {selected.length}{" "}
-            {selected.length === 1 ? "ingredient" : "ingredients"}
+            {selected.length} {selected.length === 1 ? "food" : "foods"}
             {" · "}
             {format(totals.energy)} kcal total
           </p>
@@ -58,18 +65,14 @@ export default function DashboardPage() {
             onClick={() => setShowAnalysis(!showAnalysis)}
           >
             <ChartColumn size={16} />
-            {showAnalysis ? "Hide analysis" : "Show analysis"}
+            {showAnalysis ? "Hide nutrients" : "Show nutrients"}
           </button>
           <button
             type="button"
             className="dashboard-action dashboard-action-primary"
-            onClick={() =>
-              document
-                .querySelector<HTMLInputElement>(".search-wrap input")
-                ?.focus()
-            }
+            onClick={openFoodChooser}
           >
-            <Plus size={16} /> Add ingredient
+            <Plus size={16} /> Add food
           </button>
         </div>
       </header>
@@ -94,17 +97,17 @@ export default function DashboardPage() {
           <section className="panel ingredients" id="ingredients">
             <div className="panel-heading">
               <div>
-                <h2>Your ingredients</h2>
+                <h2>Your foods</h2>
               </div>
               <div className="ingredient-actions">
                 {!showAnalysis && (
                   <button
                     type="button"
                     className="analysis-icon-button"
-                    aria-label="Show total analysis"
+                    aria-label="Show nutrients"
                     aria-expanded={false}
                     aria-controls="breakdown"
-                    title="Show total analysis"
+                    title="Show nutrients"
                     onClick={() => setShowAnalysis(true)}
                   >
                     <ChartColumn size={18} />
@@ -115,7 +118,7 @@ export default function DashboardPage() {
                   onClick={clear}
                   disabled={!entries.length}
                 >
-                  Clear all
+                  Remove all foods
                 </button>
               </div>
             </div>
@@ -123,15 +126,8 @@ export default function DashboardPage() {
             <FoodSearch />
             <FoodTable selected={selected} />
 
-            <button
-              className="add-another"
-              onClick={() =>
-                document
-                  .querySelector<HTMLInputElement>(".search-wrap input")
-                  ?.focus()
-              }
-            >
-              <Plus size={16} /> Add another ingredient
+            <button className="add-another" onClick={openFoodChooser}>
+              <Plus size={16} /> Add another food
             </button>
           </section>
         </div>
@@ -140,15 +136,15 @@ export default function DashboardPage() {
           <section className="panel breakdown" id="breakdown">
             <div className="panel-heading">
               <div>
-                <h2>Total analysis</h2>
+                <h2>Nutrition summary</h2>
               </div>
               <button
                 type="button"
                 className="analysis-icon-button"
-                aria-label="Hide total analysis"
+                aria-label="Hide nutrients"
                 aria-expanded={true}
                 aria-controls="breakdown"
-                title="Hide total analysis"
+                title="Hide nutrients"
                 onClick={() => setShowAnalysis(false)}
               >
                 <PanelRightClose size={18} />
@@ -156,13 +152,13 @@ export default function DashboardPage() {
             </div>
 
             <div className="energy-summary">
-              <span>Total energy</span>
+              <span>Total calories</span>
               <strong>
                 {format(totals.energy)} <small>kcal</small>
               </strong>
               <span>
                 for {selected.length} selected{" "}
-                {selected.length === 1 ? "ingredient" : "ingredients"}
+                {selected.length === 1 ? "food" : "foods"}
               </span>
             </div>
 
