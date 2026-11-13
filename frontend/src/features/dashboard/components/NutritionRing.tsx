@@ -2,6 +2,7 @@ import { useId } from "react";
 import "./NutritionRing.css";
 
 export type NutritionRingProps = {
+  compact?: boolean;
   totals: {
     energy: number;
     protein: number;
@@ -34,7 +35,7 @@ function safeAmount(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
-export function NutritionRing({ totals }: NutritionRingProps) {
+export function NutritionRing({ totals, compact = false }: NutritionRingProps) {
   const chartId = useId();
   const titleId = `${chartId}-title`;
   const descriptionId = `${chartId}-description`;
@@ -81,12 +82,15 @@ export function NutritionRing({ totals }: NutritionRingProps) {
   const macroDescription = macros
     .map(
       (macro) =>
-        `${macro.label}: ${amountFormatter.format(macro.amount)} g, ${shareFormatter.format(macro.share)} of macro-derived energy`,
+        `${macro.label}: ${amountFormatter.format(macro.amount)} g, ${shareFormatter.format(macro.share)} of estimated calories from protein, carbohydrates, and fat`,
     )
     .join(". ");
 
   return (
-    <section className="nutrition-ring-summary" aria-label="Nutrition summary">
+    <section
+      className={`nutrition-ring-summary${compact ? " is-compact" : ""}`}
+      aria-label="Nutrition summary"
+    >
       <h2 className="nutrition-ring-heading">Nutrition summary</h2>
 
       <div className="nutrition-ring-layout">
@@ -97,13 +101,13 @@ export function NutritionRing({ totals }: NutritionRingProps) {
             role="img"
             aria-labelledby={`${titleId} ${descriptionId}`}
           >
-            <title id={titleId}>Calories and macro energy distribution</title>
+            <title id={titleId}>Calories by nutrient</title>
             <desc id={descriptionId}>
-              Total energy: {amountFormatter.format(energy)} kcal.{" "}
+              Total calories: {amountFormatter.format(energy)} kcal.{" "}
               {macroDescription}. Fiber: {amountFormatter.format(fiber)} g,
               included in carbohydrates.
               {!hasMacroEnergy &&
-                " No macro energy to display; the ring is empty."}
+                " No estimated calories to show. The ring is empty."}
             </desc>
 
             {!hasMacroEnergy && (
@@ -159,7 +163,7 @@ export function NutritionRing({ totals }: NutritionRingProps) {
 
         <div className="nutrition-ring-legend">
           <h3 className="nutrition-ring-legend-heading">
-            Macro energy distribution
+            Calories by nutrient
           </h3>
 
           <ul className="nutrition-ring-macros">
@@ -204,15 +208,16 @@ export function NutritionRing({ totals }: NutritionRingProps) {
 
           {!hasMacroEnergy && (
             <p className="nutrition-ring-empty">
-              No macro energy to display yet.
+              No estimated calories to show.
             </p>
           )}
         </div>
       </div>
 
       <p className="nutrition-ring-note">
-        Energy shares are estimated from macros. Fiber is included in
-        carbohydrates.
+        {compact
+          ? "Estimated calorie shares. Fiber is part of carbohydrates."
+          : "Percentages estimate calories from protein, carbohydrates, and fat. Fiber is part of carbohydrates."}
       </p>
     </section>
   );
