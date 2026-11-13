@@ -343,6 +343,14 @@
     margin-bottom: 16px;
   }
 
+  .food-diary-preview[data-mobile-view="foods"] .diary-summary-anchor {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid #ededf0;
+    background: #fff;
+  }
+
   .food-diary-preview[data-mobile-view="analysis"] .diary-summary-anchor {
     margin-bottom: 0;
   }
