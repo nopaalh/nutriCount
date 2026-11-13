@@ -1,0 +1,364 @@
+.food-diary-preview {
+  --diary-muted: #747784;
+  --diary-surface: #f5f5f7;
+  --diary-border: #e5e5ea;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto 40px;
+  font-size: 14px;
+}
+
+.diary-header,
+.diary-toolbar,
+.diary-list-heading,
+.diary-selection-bar,
+.diary-dialog-heading,
+.diary-dialog-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.diary-header,
+.diary-list-heading,
+.diary-dialog-heading,
+.diary-dialog-footer {
+  justify-content: space-between;
+}
+
+.diary-header {
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.food-diary-preview .diary-preview-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--diary-muted);
+}
+
+.diary-header h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.food-diary-preview .diary-header p {
+  margin-top: 8px;
+  color: var(--diary-muted);
+  line-height: 1.5;
+}
+
+.food-diary-preview .diary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 19px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--diary-surface);
+  color: #181818;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.food-diary-preview .diary-button:hover {
+  background: #eaeaec;
+}
+
+.food-diary-preview .diary-button-dark {
+  background: #181818;
+  color: #fff;
+}
+
+.food-diary-preview .diary-button-dark:hover {
+  background: #333;
+}
+
+.food-diary-preview .diary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.food-diary-preview :is(button, select, input):focus-visible {
+  outline: 2px solid #123f9b;
+  outline-offset: 3px;
+}
+
+.diary-summary-anchor {
+  scroll-margin-top: 24px;
+  margin-bottom: 36px;
+}
+
+.diary-foods {
+  scroll-margin-top: 24px;
+}
+
+.diary-toolbar {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.diary-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(100%, 520px);
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--diary-surface);
+  color: var(--diary-muted);
+}
+
+.diary-search input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 14px;
+}
+
+.diary-search input::placeholder {
+  color: #9499a5;
+}
+
+.diary-search:focus-within {
+  box-shadow: 0 0 0 2px #123f9b;
+}
+
+.diary-list-heading {
+  margin: 0 4px 10px;
+}
+
+.diary-list-heading h2 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.food-diary-preview .diary-list-heading :is(h2, span) {
+  color: var(--diary-muted);
+}
+
+.diary-list {
+  margin: 0;
+  padding: 0;
+  border-radius: 24px;
+  background: var(--diary-surface);
+  list-style: none;
+}
+
+.food-diary-preview .diary-remove {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--diary-muted);
+}
+
+.food-diary-preview .diary-remove:hover {
+  background: #e8e8ed;
+  color: #a42d2d;
+}
+
+.diary-selection-bar {
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid var(--diary-border);
+  border-radius: 16px;
+}
+
+.diary-selection-bar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diary-selection-bar .diary-button {
+  margin-left: auto;
+}
+
+.diary-selection-bar input {
+  width: 16px;
+  height: 16px;
+  accent-color: #181818;
+}
+
+.diary-empty {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 48px 20px;
+  border-radius: 24px;
+  background: var(--diary-surface);
+  text-align: center;
+}
+
+.diary-empty h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.food-diary-preview .diary-empty p,
+.food-diary-preview .diary-data-note,
+.food-diary-preview .diary-dialog-note {
+  color: var(--diary-muted);
+  line-height: 1.6;
+}
+
+.food-diary-preview .diary-data-note {
+  max-width: 720px;
+  margin-top: 16px;
+  font-size: 12px;
+}
+
+.diary-add-dialog {
+  width: min(520px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 26px;
+  border: 1px solid var(--diary-border);
+  border-radius: 24px;
+  background: #fff;
+  color: #181818;
+  box-shadow: 0 24px 80px #0002;
+  overflow-y: auto;
+}
+
+.diary-add-dialog::backdrop {
+  background: #11182766;
+}
+
+.diary-dialog-heading {
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.diary-dialog-heading h2 {
+  font-size: 23px;
+}
+
+.food-diary-preview .diary-dialog-heading p {
+  margin-top: 7px;
+  color: var(--diary-muted);
+  font-size: 13px;
+}
+
+.diary-available-foods {
+  display: grid;
+  gap: 6px;
+  max-height: 300px;
+  margin: 16px 0;
+  overflow-y: auto;
+}
+
+.diary-food-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.diary-food-option:hover,
+.diary-food-option.is-selected {
+  border-color: var(--diary-border);
+  background: var(--diary-surface);
+}
+
+.diary-food-option > span:nth-of-type(1) {
+  font-size: 23px;
+}
+
+.diary-food-option > span:nth-of-type(2) {
+  flex: 1;
+}
+
+.diary-food-option :is(strong, small) {
+  display: block;
+}
+
+.diary-food-option strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.food-diary-preview .diary-food-option small {
+  margin-top: 4px;
+  color: var(--diary-muted);
+  font-size: 11px;
+}
+
+.diary-food-option input {
+  accent-color: #181818;
+}
+
+.diary-dialog-footer {
+  align-items: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid var(--diary-border);
+}
+
+.diary-add-weight {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.diary-add-weight input {
+  width: 116px;
+  padding: 10px;
+  border: 1px solid var(--diary-border);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.food-diary-preview .diary-dialog-note,
+.food-diary-preview .diary-no-results {
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+@media (max-width: 760px) {
+  .diary-header h1 {
+    font-size: 28px;
+  }
+
+  .food-diary-preview .diary-button {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+
+  .diary-search {
+    width: 100%;
+  }
+
+  .diary-list {
+    border-radius: 18px;
+  }
+
+  .diary-list-heading {
+    font-size: 12px;
+  }
+
+  .diary-add-dialog {
+    padding: 20px;
+  }
+}
