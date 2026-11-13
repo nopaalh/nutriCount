@@ -4,6 +4,11 @@ import type { SelectedFood } from "../types/food.types";
 import { useNutrition } from "../../dashboard/store/useNutritionStore";
 import { format } from "../../../shared/lib/formatters";
 
+const columnLabels: Record<string, string> = {
+  energy: "Calories",
+  carbs: "Carbohydrates",
+};
+
 export function FoodTable({ selected }: { selected: SelectedFood[] }) {
   const { entries, replace, update, remove } = useNutrition();
 
@@ -16,15 +21,15 @@ export function FoodTable({ selected }: { selected: SelectedFood[] }) {
               <tr>
                 <th scope="col">Food</th>
                 <th scope="col">
-                  Amount <small>g</small>
+                  Weight <small>g</small>
                 </th>
                 {nutrientRows.map(([key, label, unit]) => (
                   <th scope="col" key={key}>
-                    {label} <small>{unit}</small>
+                    {columnLabels[key] ?? label} <small>{unit}</small>
                   </th>
                 ))}
                 <th scope="col">
-                  <span className="sr-only">Remove</span>
+                  <span className="sr-only">Remove food</span>
                 </th>
               </tr>
             </thead>
@@ -34,7 +39,7 @@ export function FoodTable({ selected }: { selected: SelectedFood[] }) {
                 <tr key={food.id}>
                   <th scope="row" className="editable-cell">
                     <select
-                      aria-label={`Food for ${food.name}`}
+                      aria-label={`Replace ${food.name}`}
                       value={food.id}
                       onChange={(e) => replace(food.id, e.target.value)}
                     >
@@ -139,8 +144,8 @@ export function FoodTable({ selected }: { selected: SelectedFood[] }) {
       ) : (
         <div className="empty">
           <Apple size={24} />
-          <strong>Your list is empty</strong>
-          <span>Search above to add an ingredient.</span>
+          <strong>No foods added</strong>
+          <span>Choose a food to add it to your list.</span>
         </div>
       )}
     </>
