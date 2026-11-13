@@ -27,11 +27,14 @@ export function AppLayout({
     <div className={`app-shell${isPreview ? " app-shell-preview" : ""}`}>
       <aside className="sidebar">
         <a className="brand" href="#dashboard">
-          <img className="brand-logo" src="/nutricount-logo.png" alt="" />
-          <span>
-            nutri<span>count</span>
-            <small>Food and nutrition</small>
-          </span>
+          <img
+            className="brand-logo"
+            src="/nutricount-logo.png"
+            width={28}
+            height={28}
+            alt=""
+          />
+          <span>NutriCount</span>
         </a>
         <div className="side-label">Navigation</div>
         <a
