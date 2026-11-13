@@ -16,18 +16,14 @@
 .diary-header,
 .diary-toolbar,
 .diary-list-heading,
-.diary-selection-bar,
-.diary-dialog-heading,
-.diary-dialog-footer {
+.diary-selection-bar {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .diary-header,
-.diary-list-heading,
-.diary-dialog-heading,
-.diary-dialog-footer {
+.diary-list-heading {
   justify-content: space-between;
 }
 
@@ -124,25 +120,6 @@
   list-style: none;
 }
 
-.food-diary-preview .diary-remove {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--diary-muted);
-}
-
-.food-diary-preview .diary-remove:hover {
-  background: #e8e8ed;
-  color: #a42d2d;
-}
-
 .diary-selection-bar {
   flex-wrap: wrap;
   margin-bottom: 20px;
@@ -183,8 +160,7 @@
 }
 
 .food-diary-preview .diary-empty p,
-.food-diary-preview .diary-data-note,
-.food-diary-preview .diary-dialog-note {
+.food-diary-preview .diary-data-note {
   color: var(--diary-muted);
   line-height: 1.6;
 }
@@ -192,113 +168,6 @@
 .food-diary-preview .diary-data-note {
   max-width: 720px;
   margin-top: 16px;
-  font-size: 12px;
-}
-
-.diary-add-dialog {
-  width: min(520px, calc(100vw - 32px));
-  max-height: calc(100dvh - 48px);
-  padding: 26px;
-  border: 1px solid var(--diary-border);
-  border-radius: 24px;
-  background: #fff;
-  color: #181818;
-  box-shadow: 0 24px 80px #0002;
-  overflow-y: auto;
-}
-
-.diary-add-dialog::backdrop {
-  background: #11182766;
-}
-
-.diary-dialog-heading {
-  align-items: flex-start;
-  margin-bottom: 22px;
-}
-
-.diary-dialog-heading h2 {
-  font-size: 23px;
-}
-
-.food-diary-preview .diary-dialog-heading p {
-  margin-top: 7px;
-  color: var(--diary-muted);
-  font-size: 13px;
-}
-
-.diary-available-foods {
-  display: grid;
-  gap: 6px;
-  max-height: 300px;
-  margin: 16px 0;
-  overflow-y: auto;
-}
-
-.diary-food-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  border: 1px solid transparent;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.diary-food-option:hover,
-.diary-food-option.is-selected {
-  border-color: var(--diary-border);
-  background: var(--diary-surface);
-}
-
-.diary-food-option > span:nth-of-type(1) {
-  font-size: 23px;
-}
-
-.diary-food-option > span:nth-of-type(2) {
-  flex: 1;
-}
-
-.diary-food-option :is(strong, small) {
-  display: block;
-}
-
-.diary-food-option strong {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.food-diary-preview .diary-food-option small {
-  margin-top: 4px;
-  color: var(--diary-muted);
-  font-size: 11px;
-}
-
-.diary-food-option input {
-  accent-color: #181818;
-}
-
-.diary-dialog-footer {
-  align-items: flex-end;
-  padding-top: 16px;
-  border-top: 1px solid var(--diary-border);
-}
-
-.diary-add-weight {
-  display: grid;
-  gap: 8px;
-  font-size: 13px;
-}
-
-.diary-add-weight input {
-  width: 116px;
-  padding: 10px;
-  border: 1px solid var(--diary-border);
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.food-diary-preview .diary-dialog-note {
-  margin-top: 12px;
   font-size: 12px;
 }
 
@@ -443,8 +312,10 @@
   .diary-list-heading {
     font-size: 12px;
   }
+}
 
-  .diary-add-dialog {
-    padding: 20px;
+@media (max-width: 760px) and (max-height: 500px) {
+  .food-diary-preview[data-mobile-view="foods"] .diary-summary-anchor {
+    position: static;
   }
 }

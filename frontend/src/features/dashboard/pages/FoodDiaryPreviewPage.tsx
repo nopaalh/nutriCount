@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import type { FormEvent } from "react";
+
 import {
-  Check,
   CheckCircle2,
   Download,
   Plus,
   UtensilsCrossed,
   SlidersHorizontal,
   Trash2,
-  X,
 } from "lucide-react";
 import { AppLayout } from "../../../app/layouts/AppLayout";
 import { format } from "../../../shared/lib/formatters";
+import { AddFoodDialog } from "../../foods/components/AddFoodDialog";
 import { FoodEntryRow } from "../../foods/components/FoodEntryRow";
 import { foods } from "../../foods/data/foods";
 import { NutritionRing } from "../components/NutritionRing";
@@ -27,9 +26,6 @@ export default function FoodDiaryPreviewPage() {
 
   const [selecting, setSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
-  const [foodId, setFoodId] = useState(foods[0]?.id ?? "");
-  const [weight, setWeight] = useState("100");
 
   const [category, setCategory] = useState("");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -111,22 +107,20 @@ export default function FoodDiaryPreviewPage() {
     );
   }
 
-  function addFood(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const amount = Number(weight);
+  function addFood(id: string, amount: number) {
     if (
-      !foods.some((food) => food.id === foodId) ||
+      !foods.some((food) => food.id === id) ||
       !Number.isFinite(amount) ||
-      amount <= 0
+      amount <= 0 ||
+      amount > 100000
     ) {
       return;
     }
     const existingWeight = Number(
-      entries.find((entry) => entry.id === foodId)?.weight ?? 0,
+      entries.find((entry) => entry.id === id)?.weight ?? 0,
     );
-    add(foodId);
-    update(foodId, existingWeight + amount);
-    dialogRef.current?.close();
+    add(id);
+    update(id, existingWeight + amount);
   }
 
   function exportCsv() {
@@ -373,87 +367,16 @@ export default function FoodDiaryPreviewPage() {
           </p>
         </section>
 
-        <dialog
-          className="diary-add-dialog"
+        <AddFoodDialog
           ref={dialogRef}
-          aria-labelledby="diary-add-title"
+          foods={foods}
+          onAddFood={addFood}
           onClose={() => {
-            setWeight("100");
             if (window.location.hash === "#/preview/add") {
               window.location.hash = "#/preview";
             }
           }}
-        >
-          <form onSubmit={addFood}>
-            <div className="diary-dialog-heading">
-              <div>
-                <h2 id="diary-add-title">Add food</h2>
-                <p>Choose a food, then enter its weight in grams.</p>
-              </div>
-              <button
-                type="button"
-                className="diary-remove"
-                aria-label="Close food chooser"
-                onClick={() => dialogRef.current?.close()}
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div
-              className="diary-available-foods"
-              role="group"
-              aria-label="Available foods"
-            >
-              {foods.map((food) => (
-                <label
-                  className={`diary-food-option${foodId === food.id ? " is-selected" : ""}`}
-                  key={food.id}
-                >
-                  <input
-                    type="radio"
-                    name="food"
-                    value={food.id}
-                    checked={foodId === food.id}
-                    onChange={() => setFoodId(food.id)}
-                  />
-                  <span aria-hidden="true">{food.emoji}</span>
-                  <span>
-                    <strong>{food.name}</strong>
-                    <small>
-                      {food.category} · {food.energy} kcal per 100 g
-                    </small>
-                  </span>
-                  {foodId === food.id && <Check size={17} aria-hidden="true" />}
-                </label>
-              ))}
-            </div>
-            <div className="diary-dialog-footer">
-              <label className="diary-add-weight">
-                Weight (g)
-                <input
-                  type="number"
-                  required
-                  min="0.1"
-                  max="100000"
-                  step="0.1"
-                  value={weight}
-                  onChange={(event) => setWeight(event.target.value)}
-                />
-              </label>
-              <button
-                type="submit"
-                className="diary-button diary-button-dark"
-                disabled={!foods.some((food) => food.id === foodId)}
-              >
-                <Plus size={17} /> Add food
-              </button>
-            </div>
-            <p className="diary-dialog-note">
-              Adding a food again adds to its current weight.
-            </p>
-          </form>
-        </dialog>
+        />
       </div>
     </AppLayout>
   );
