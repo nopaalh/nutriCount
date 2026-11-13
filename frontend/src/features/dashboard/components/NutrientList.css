@@ -1,0 +1,59 @@
+.nutrient-list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 8px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrient-list:focus-visible {
+  outline: 2px solid #123f9b;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.nutrient-list dl {
+  margin: 0;
+}
+
+.nutrient-list .nutrient-list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ededf0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.nutrient-list .nutrient-list-row:last-child {
+  border-bottom: 0;
+}
+
+.nutrient-list dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.nutrient-list dd {
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.nutrient-list .nutrient-list-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.nutrient-list .nutrient-list-row .nutrient-list-unavailable {
+  color: #747784;
+  font-size: 12px;
+}
