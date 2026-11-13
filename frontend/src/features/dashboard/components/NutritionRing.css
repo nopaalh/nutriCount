@@ -1,0 +1,180 @@
+.nutrition-ring-summary {
+  width: 100%;
+  min-width: 0;
+  padding: 20px 4px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #182334;
+  font-family: Arial, Helvetica, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrition-ring-summary .nutrition-ring-heading {
+  margin: 0 0 18px;
+  color: #182334;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+.nutrition-ring-summary .nutrition-ring-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+  max-width: 760px;
+}
+
+.nutrition-ring-summary .nutrition-ring-chart {
+  width: 100%;
+  max-width: 260px;
+  min-width: 0;
+  justify-self: center;
+}
+
+.nutrition-ring-summary .nutrition-ring-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: inherit;
+}
+
+.nutrition-ring-summary .nutrition-ring-total {
+  font-size: 43px;
+  font-weight: 600;
+  letter-spacing: -1.5px;
+}
+
+.nutrition-ring-summary .nutrition-ring-unit {
+  font-size: 22.5px;
+  font-weight: 400;
+}
+
+.nutrition-ring-summary .nutrition-ring-legend {
+  min-width: 0;
+}
+
+.nutrition-ring-summary .nutrition-ring-legend-heading {
+  margin: 0 0 25px;
+  color: #626d7b;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.nutrition-ring-summary .nutrition-ring-macros {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nutrition-ring-summary .nutrition-ring-macro-heading {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.nutrition-ring-summary .nutrition-ring-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.nutrition-ring-summary .nutrition-ring-label {
+  color: #182334;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.nutrition-ring-summary .nutrition-ring-amount {
+  color: #182334;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.nutrition-ring-summary .nutrition-ring-share-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 0 20px;
+}
+
+.nutrition-ring-summary .nutrition-ring-track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf0f4;
+}
+
+.nutrition-ring-summary .nutrition-ring-progress {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.nutrition-ring-summary .nutrition-ring-percentage {
+  color: #626d7b;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.nutrition-ring-summary .nutrition-ring-fiber {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.nutrition-ring-summary .nutrition-ring-fiber-line {
+  width: 10px;
+  height: 4px;
+  border-radius: 999px;
+  background: #a69ad9;
+}
+
+.nutrition-ring-summary .nutrition-ring-empty {
+  margin: 18px 0 0;
+  color: #626d7b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.nutrition-ring-summary .nutrition-ring-note {
+  max-width: 70ch;
+  margin: 20px 0 0;
+  color: #626d7b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .nutrition-ring-summary .nutrition-ring-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .nutrition-ring-summary .nutrition-ring-chart {
+    max-width: 240px;
+    justify-self: center;
+  }
+
+  .nutrition-ring-summary .nutrition-ring-legend {
+    width: 100%;
+    max-width: 400px;
+    justify-self: center;
+  }
+
+  .nutrition-ring-summary .nutrition-ring-legend-heading {
+    margin-bottom: 20px;
+  }
+}
