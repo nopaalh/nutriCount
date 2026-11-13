@@ -1,11 +1,12 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import {
   Check,
   CheckCircle2,
   Download,
   Plus,
-  Search,
+  UtensilsCrossed,
+  SlidersHorizontal,
   Trash2,
   X,
 } from "lucide-react";
@@ -19,16 +20,47 @@ import { useNutrition } from "../store/useNutritionStore";
 import "./FoodDiaryPreviewPage.css";
 
 const nutrientKeys = ["energy", "protein", "carbs", "fat", "fiber"] as const;
+const categories = [...new Set(foods.map((food) => food.category))];
 
 export default function FoodDiaryPreviewPage() {
   const { entries, add, update, remove } = useNutrition();
 
   const [selecting, setSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [addQuery, setAddQuery] = useState("");
+
   const [foodId, setFoodId] = useState(foods[0]?.id ?? "");
   const [weight, setWeight] = useState("100");
+
+  const [category, setCategory] = useState("");
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 760px)").matches,
+  );
+  const [mobileView, setMobileView] = useState("foods");
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 760px)");
+    function updateViewport() {
+      setIsMobile(media.matches);
+    }
+    updateViewport();
+    media.addEventListener("change", updateViewport);
+    return () => media.removeEventListener("change", updateViewport);
+  }, []);
+
+  useEffect(() => {
+    function syncMobileView() {
+      const hash = window.location.hash;
+      setMobileView(hash.endsWith("/breakdown") ? "analysis" : "foods");
+      if (hash === "#/preview/add" && !dialogRef.current?.open) {
+        dialogRef.current?.showModal();
+      }
+    }
+    syncMobileView();
+    window.addEventListener("hashchange", syncMobileView);
+    return () => window.removeEventListener("hashchange", syncMobileView);
+  }, []);
 
   const selected = entries.flatMap((entry) => {
     const food = foods.find((item) => item.id === entry.id);
@@ -42,19 +74,25 @@ export default function FoodDiaryPreviewPage() {
     }
   }
 
-  const visibleFoods = selected;
-  const visibleEnergy = totals.energy;
+  const visibleFoods =
+    isMobile && category
+      ? selected.filter((food) => food.category === category)
+      : selected;
+  const visibleEnergy = visibleFoods.reduce(
+    (sum, food) => sum + (food.energy * Number(food.weight)) / 100,
+    0,
+  );
   const checkedIds = selectedIds.filter((id) =>
     entries.some((entry) => entry.id === id),
   );
   const allVisibleChecked =
     visibleFoods.length > 0 &&
     visibleFoods.every((food) => checkedIds.includes(food.id));
-  const availableFoods = foods.filter((food) =>
-    `${food.name} ${food.category}`
-      .toLowerCase()
-      .includes(addQuery.trim().toLowerCase()),
-  );
+
+  function toggleSelecting() {
+    setSelecting(!selecting);
+    setSelectedIds([]);
+  }
 
   function toggleSelection(id: string) {
     setSelectedIds((current) =>
@@ -97,7 +135,7 @@ export default function FoodDiaryPreviewPage() {
         "Food",
         "Category",
         "Weight (g)",
-        "Energy (kcal)",
+        "Calories (kcal)",
         "Protein (g)",
         "Carbohydrates (g)",
         "Fat (g)",
@@ -130,12 +168,35 @@ export default function FoodDiaryPreviewPage() {
   }
 
   return (
-    <AppLayout page="preview">
-      <div className="food-diary-preview">
+    <AppLayout page="preview" onAddFood={() => dialogRef.current?.showModal()}>
+      <div className="food-diary-preview" data-mobile-view={mobileView}>
+        <div className="diary-mobile-actions">
+          <button
+            type="button"
+            className="diary-button diary-mobile-export"
+            aria-label="Download CSV"
+            title="Download a comma-separated values (CSV) file."
+            disabled={!visibleFoods.length}
+            onClick={exportCsv}
+          >
+            <Download size={18} />
+          </button>
+          <button
+            type="button"
+            className="diary-button"
+            aria-pressed={selecting}
+            onClick={toggleSelecting}
+          >
+            {selecting ? "Finish selection" : "Select foods"}
+          </button>
+        </div>
         <header className="diary-header">
           <div>
-            <span className="diary-preview-label">New layout preview</span>
-            <h1>Food diary</h1>
+            <h1>
+              {isMobile && mobileView === "analysis"
+                ? "Nutrition summary"
+                : "Food diary"}
+            </h1>
             <p>
               {selected.length} {selected.length === 1 ? "food" : "foods"} ·{" "}
               {format(totals.energy)} kcal total
@@ -144,7 +205,10 @@ export default function FoodDiaryPreviewPage() {
         </header>
 
         <div id="/preview/breakdown" className="diary-summary-anchor">
-          <NutritionRing totals={totals} />
+          <NutritionRing
+            totals={totals}
+            compact={isMobile && mobileView === "foods"}
+          />
         </div>
 
         <section
@@ -157,12 +221,10 @@ export default function FoodDiaryPreviewPage() {
               type="button"
               className="diary-button"
               aria-pressed={selecting}
-              onClick={() => {
-                setSelecting(!selecting);
-                setSelectedIds([]);
-              }}
+              onClick={toggleSelecting}
             >
-              <CheckCircle2 size={16} /> {selecting ? "Done" : "Select"}
+              <CheckCircle2 size={16} />{" "}
+              {selecting ? "Finish selection" : "Select foods"}
             </button>
             <button
               type="button"
@@ -170,7 +232,7 @@ export default function FoodDiaryPreviewPage() {
               onClick={exportCsv}
               disabled={!visibleFoods.length}
             >
-              <Download size={16} /> Export CSV
+              <Download size={16} /> Download CSV
             </button>
             <button
               type="button"
@@ -179,6 +241,52 @@ export default function FoodDiaryPreviewPage() {
             >
               <Plus size={17} /> Add food
             </button>
+          </div>
+
+          <div className="diary-mobile-tools">
+            <div className="diary-mobile-controls">
+              <button
+                type="button"
+                className="diary-mobile-chip"
+                aria-expanded={showMobileFilters}
+                aria-controls="diary-mobile-filters"
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+              >
+                <SlidersHorizontal size={14} /> Filter
+                {category && (
+                  <span
+                    className="diary-filter-dot"
+                    aria-label="Active filter"
+                  />
+                )}
+              </button>
+            </div>
+            {showMobileFilters && (
+              <div
+                className="diary-mobile-filter-panel"
+                id="diary-mobile-filters"
+              >
+                <label>
+                  Category
+                  <select
+                    value={category}
+                    onChange={(event) => setCategory(event.target.value)}
+                  >
+                    <option value="">All categories</option>
+                    {categories.map((item) => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            )}
+            <p className="diary-mobile-count">
+              {visibleFoods.length}{" "}
+              {visibleFoods.length === 1 ? "food" : "foods"} ·{" "}
+              {format(visibleEnergy)} kcal total
+            </p>
           </div>
 
           {selecting && (
@@ -190,7 +298,7 @@ export default function FoodDiaryPreviewPage() {
                   onChange={toggleVisibleSelection}
                   disabled={!visibleFoods.length}
                 />{" "}
-                Select visible
+                Select all listed foods
               </label>
               <span aria-live="polite">{checkedIds.length} selected</span>
               <button
@@ -202,7 +310,7 @@ export default function FoodDiaryPreviewPage() {
                   setSelectedIds([]);
                 }}
               >
-                <Trash2 size={15} /> Remove selected
+                <Trash2 size={15} /> Remove selected foods
               </button>
             </div>
           )}
@@ -235,24 +343,33 @@ export default function FoodDiaryPreviewPage() {
             </ul>
           ) : (
             <div className="diary-empty">
-              <Search size={26} aria-hidden="true" />
-              <h3>Start with your first food</h3>
+              <UtensilsCrossed size={26} aria-hidden="true" />
+              <h3>
+                {selected.length ? "No foods in this category" : "No foods yet"}
+              </h3>
               <p>
-                Add a food and enter its weight to calculate your nutrition.
+                {selected.length
+                  ? "Choose another category or clear the filter."
+                  : "Choose a food and enter its weight to see calories and nutrients."}
               </p>
               <button
                 className="diary-button"
                 type="button"
-                onClick={() => dialogRef.current?.showModal()}
+                onClick={() => {
+                  if (selected.length) {
+                    setCategory("");
+                  } else {
+                    dialogRef.current?.showModal();
+                  }
+                }}
               >
-                Add food
+                {selected.length ? "Clear filter" : "Add food"}
               </button>
             </div>
           )}
           <p className="diary-data-note">
-            Illustrative food data, not verified dietary guidance. This preview
-            shares ingredients with your dashboard. Vitamin and mineral values
-            are not available yet.
+            These estimates use sample food data, not verified nutrition values.
+            Vitamin and mineral values are not available.
           </p>
         </section>
 
@@ -261,42 +378,34 @@ export default function FoodDiaryPreviewPage() {
           ref={dialogRef}
           aria-labelledby="diary-add-title"
           onClose={() => {
-            setAddQuery("");
             setWeight("100");
+            if (window.location.hash === "#/preview/add") {
+              window.location.hash = "#/preview";
+            }
           }}
         >
           <form onSubmit={addFood}>
             <div className="diary-dialog-heading">
               <div>
-                <h2 id="diary-add-title">Add a food</h2>
-                <p>Choose a food and enter its weight.</p>
+                <h2 id="diary-add-title">Add food</h2>
+                <p>Choose a food, then enter its weight in grams.</p>
               </div>
               <button
                 type="button"
                 className="diary-remove"
-                aria-label="Close add food"
+                aria-label="Close food chooser"
                 onClick={() => dialogRef.current?.close()}
               >
                 <X size={20} />
               </button>
             </div>
-            <label className="diary-search">
-              <Search size={17} />
-              <input
-                type="search"
-                autoFocus
-                placeholder="Search available foods"
-                aria-label="Search available foods"
-                value={addQuery}
-                onChange={(event) => setAddQuery(event.target.value)}
-              />
-            </label>
+
             <div
               className="diary-available-foods"
               role="group"
               aria-label="Available foods"
             >
-              {availableFoods.map((food) => (
+              {foods.map((food) => (
                 <label
                   className={`diary-food-option${foodId === food.id ? " is-selected" : ""}`}
                   key={food.id}
@@ -312,17 +421,12 @@ export default function FoodDiaryPreviewPage() {
                   <span>
                     <strong>{food.name}</strong>
                     <small>
-                      {food.category} · {food.energy} kcal / 100 g
+                      {food.category} · {food.energy} kcal per 100 g
                     </small>
                   </span>
                   {foodId === food.id && <Check size={17} aria-hidden="true" />}
                 </label>
               ))}
-              {!availableFoods.length && (
-                <p className="diary-no-results">
-                  No foods found. Try another search.
-                </p>
-              )}
             </div>
             <div className="diary-dialog-footer">
               <label className="diary-add-weight">
@@ -340,13 +444,13 @@ export default function FoodDiaryPreviewPage() {
               <button
                 type="submit"
                 className="diary-button diary-button-dark"
-                disabled={!availableFoods.some((food) => food.id === foodId)}
+                disabled={!foods.some((food) => food.id === foodId)}
               >
                 <Plus size={17} /> Add food
               </button>
             </div>
             <p className="diary-dialog-note">
-              Adding the same food increases its existing weight.
+              Adding a food again adds to its current weight.
             </p>
           </form>
         </dialog>

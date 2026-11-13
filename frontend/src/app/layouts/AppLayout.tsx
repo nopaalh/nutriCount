@@ -7,25 +7,33 @@ import {
   UtensilsCrossed,
 } from "lucide-react";
 import graphIcon from "../../assets/icons/Graph.svg";
+import { MobileNavigation } from "./MobileNavigation";
+import "./AppLayout.css";
 
 type AppLayoutProps = {
   children: ReactNode;
   page?: "dashboard" | "preview";
+  onAddFood?: () => void;
 };
 
-export function AppLayout({ children, page = "dashboard" }: AppLayoutProps) {
+export function AppLayout({
+  children,
+  page = "dashboard",
+  onAddFood,
+}: AppLayoutProps) {
   const isPreview = page === "preview";
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell${isPreview ? " app-shell-preview" : ""}`}>
       <aside className="sidebar">
         <a className="brand" href="#dashboard">
           <img className="brand-logo" src="/nutricount-logo.png" alt="" />
           <span>
             nutri<span>count</span>
-            <small>FOOD & NUTRITION</small>
+            <small>Food and nutrition</small>
           </span>
         </a>
-        <div className="side-label">Workspace</div>
+        <div className="side-label">Navigation</div>
         <a
           className={`nav-item dashboard-link${!isPreview ? " active" : ""}`}
           href="#dashboard"
@@ -38,21 +46,21 @@ export function AppLayout({ children, page = "dashboard" }: AppLayoutProps) {
           className={`nav-item preview-link${isPreview ? " active" : ""}`}
           href="#/preview"
           aria-current={isPreview ? "page" : undefined}
-          aria-label="Food diary preview"
+          aria-label="Food diary"
         >
-          <UtensilsCrossed width={18} height={20} /> Food diary preview
+          <UtensilsCrossed width={18} height={20} /> Food diary
         </a>
         <a
           className="nav-item"
           href={isPreview ? "#/preview/ingredients" : "#ingredients"}
         >
-          <Apple width={18} height={20} /> Food ingredients
+          <Apple width={18} height={20} /> Foods
         </a>
         <a
           className="nav-item"
           href={isPreview ? "#/preview/breakdown" : "#breakdown"}
         >
-          <BookOpen width={18} height={20} /> Nutrition breakdown
+          <BookOpen width={18} height={20} /> Nutrients
         </a>
         <div className="side-footer">
           <span className="avatar">N</span>
@@ -68,11 +76,12 @@ export function AppLayout({ children, page = "dashboard" }: AppLayoutProps) {
           <footer>
             <span>© NutriCount</span>
             <span>
-              Small choices, better understanding. <Leaf size={13} />
+              Nutrition estimates from sample food data. <Leaf size={13} />
             </span>
           </footer>
         </div>
       </main>
+      <MobileNavigation isPreview={isPreview} onAddFood={onAddFood} />
     </div>
   );
 }

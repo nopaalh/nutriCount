@@ -1,0 +1,31 @@
+@media (max-width: 760px) {
+  .app-shell {
+    min-height: 100dvh;
+    background: #fff;
+  }
+
+  .app-shell .sidebar {
+    display: none;
+  }
+
+  .app-shell .main {
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+  }
+
+  .app-shell .main .content {
+    width: 100%;
+    max-width: none;
+    min-height: 100dvh;
+    margin: 0;
+    padding: 20px 20px calc(112px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-shell .main .content footer {
+    display: none;
+  }
+}
