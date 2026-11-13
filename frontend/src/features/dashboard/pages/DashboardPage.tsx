@@ -39,17 +39,40 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="heading-row">
+      <header className="dashboard-header">
         <div>
           <h1>Nutrition dashboard</h1>
+          <p>
+            {selected.length}{" "}
+            {selected.length === 1 ? "ingredient" : "ingredients"}
+            {" · "}
+            {format(totals.energy)} kcal total
+          </p>
         </div>
-      </div>
-
-      <div className="overview-line">
-        <div>
-          <h2>Nutrition overview</h2>
+        <div className="dashboard-header-actions">
+          <button
+            type="button"
+            className="dashboard-action"
+            aria-expanded={showAnalysis}
+            aria-controls="breakdown"
+            onClick={() => setShowAnalysis(!showAnalysis)}
+          >
+            <ChartColumn size={16} />
+            {showAnalysis ? "Hide analysis" : "Show analysis"}
+          </button>
+          <button
+            type="button"
+            className="dashboard-action dashboard-action-primary"
+            onClick={() =>
+              document
+                .querySelector<HTMLInputElement>(".search-wrap input")
+                ?.focus()
+            }
+          >
+            <Plus size={16} /> Add ingredient
+          </button>
         </div>
-      </div>
+      </header>
 
       <section className="stat-grid" aria-label="Nutrition totals">
         {nutrients.map(({ key, label, unit }) => (
